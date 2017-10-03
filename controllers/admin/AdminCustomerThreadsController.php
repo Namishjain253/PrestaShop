@@ -180,7 +180,7 @@ class AdminCustomerThreadsControllerCore extends AdminController
                     'PS_SAV_IMAP_PWD' => array(
                         'title' => $this->l('IMAP password'),
                         'hint' => $this->l('Password to use to connect your IMAP server.'),
-                        'type' => 'text'
+                        'type' => 'password'
                     ),
                     'PS_SAV_IMAP_DELETE_MSG' => array(
                         'title' => $this->l('Delete messages'),
