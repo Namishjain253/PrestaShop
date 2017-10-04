@@ -556,13 +556,16 @@ class OrderDetailCore extends ObjectModel
      */
     protected function setDetailProductPrice(Order $order, Cart $cart, $product)
     {
+//        var_dump($product);
+//        die;
         $this->setContext((int)$product['id_shop']);
         Product::getPriceStatic((int)$product['id_product'], true, (int)$product['id_product_attribute'], 6, null, false, true, $product['cart_quantity'], false, (int)$order->id_customer, (int)$order->id_cart, (int)$order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}, $specific_price, true, true, $this->context);
         $this->specificPrice = $specific_price;
         $this->original_product_price = Product::getPriceStatic($product['id_product'], false, (int)$product['id_product_attribute'], 6, null, false, false, 1, false, null, null, null, $null, true, true, $this->context);
         $this->product_price = $this->original_product_price;
         $this->unit_price_tax_incl = (float)$product['price_wt'];
-        $this->unit_price_tax_excl = (float)$product['price'];
+//        $this->unit_price_tax_excl = (float)$product['price'];
+        $this->unit_price_tax_excl =  $this->original_product_price;
         $this->total_price_tax_incl = (float)$product['total_wt'];
         $this->total_price_tax_excl = (float)$product['total'];
 
