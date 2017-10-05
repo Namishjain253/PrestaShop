@@ -32,6 +32,7 @@
 
 		{if isset($layout.before_discount)}
 			<th class="product header small" width="{$layout.unit_price_tax_excl.width}%">{l s='Base price' pdf='true'} <br /> {l s='(Tax excl.)' pdf='true'}</th>
+			<th class="product header-right small" width="{$layout.reduction.width}%">{l s='Discounts' pdf='true'} </th>
 		{/if}
 
 		<th class="product header-right small" width="{$layout.unit_price_tax_excl.width}%">{l s='Unit Price' pdf='true'} <br /> {l s='(Tax excl.)' pdf='true'}</th>
@@ -80,6 +81,17 @@
 						{displayPrice currency=$order->id_currency price=$order_detail.unit_price_tax_excl_before_specific_price}
 					{else}
 						--
+					{/if}
+				</td>
+				<td class="product center">
+					{if $order_detail.reduction_amount > 0}
+						{displayPrice currency=$order->id_currency price=$order_detail.reduction_amount}
+					{else}
+						{if $order_detail.reduction_percent > 0}
+							{$order_detail.reduction_percent} %
+						{else}
+							--
+						{/if}
 					{/if}
 				</td>
 			{/if}

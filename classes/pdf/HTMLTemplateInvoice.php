@@ -103,6 +103,9 @@ class HTMLTemplateInvoiceCore extends HTMLTemplate
             ),
             'total_tax_excl' => array(
                 'width' => 0,
+            ),
+            'reduction' => array(
+                'width' => 12,
             )
         );
 
