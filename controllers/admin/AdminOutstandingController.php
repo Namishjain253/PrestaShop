@@ -39,6 +39,7 @@ class AdminOutstandingControllerCore  extends AdminController
         $this->context = Context::getContext();
 
         $this->_select = '`id_order_invoice` AS `id_invoice`,
+        `company` AS `company`,
 		`id_order_invoice` AS `outstanding`,
 		CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS `customer`,
 		c.`outstanding_allow_amount`,
