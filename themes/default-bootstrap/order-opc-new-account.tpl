@@ -10,8 +10,10 @@
 				<div id="opc_login_errors" class="alert alert-danger" style="display:none;"></div>
 				<!-- END Error return block -->
 				<p class="form-group">
-					<label for="login_email">{l s='Email address'}</label>
-					<input type="email" class="form-control validate" id="login_email" name="email" data-validate="isEmail" />
+				<div class="form-group">
+					<label for="email_create">{l s='Email address'}</label>
+					<input type="email" class="is_required validate account_input form-control" data-validate="isEmail" id="email_create" name="email_create" value="{if isset($smarty.post.email_create)}{$smarty.post.email_create|stripslashes}{/if}" />
+				</div>
 				</p>
 				<p class="form-group">
 					<label for="login_passwd">{l s='Password'}</label>
@@ -53,7 +55,7 @@
 					<!-- Error return block -->
 					<div id="opc_account_errors" class="alert alert-danger" style="display:none;"></div>
 					<!-- END Error return block -->
-					<!-- Account -->
+					<!-- Account kh-->
 					<input type="hidden" id="is_new_customer" name="is_new_customer" value="0" />
 					<input type="hidden" id="opc_id_customer" name="opc_id_customer" value="{if isset($guestInformations) && isset($guestInformations.id_customer) && $guestInformations.id_customer}{$guestInformations.id_customer}{else}0{/if}" />
 					<input type="hidden" id="opc_id_address_delivery" name="opc_id_address_delivery" value="{if isset($guestInformations) && isset($guestInformations.id_address_delivery) && $guestInformations.id_address_delivery}{$guestInformations.id_address_delivery}{else}0{/if}" />
@@ -386,9 +388,18 @@
 						<p class="required opc-required pull-right">
 							<sup>*</sup>{l s='Required field'}
 						</p>
-						<button type="submit" name="submitAccount" id="submitAccount" class="btn btn-default button button-medium"><span>{l s='Save'}<i class="icon-chevron-right right"></i></span></button>
-
-					</div>
+						<button type="submit" name="submitAccount" id="submitAccount" class="btn btn-default button button-medium">
+							<span>
+							{l s='Save'}
+							<i class="icon-chevron-right right"></i>
+							</span>
+						</button>
+						{*<button  type="submit" name="submitAccount" id="submitAccount">*}
+							{*<span>*}
+								{*<i class="icon-user left"></i>*}
+								{*{l s='Save'}*}
+							{*</span>*}
+							{*</button>*}
 					<div style="display: none;" id="opc_account_saved" class="alert alert-success">
 						{l s='Account information saved successfully'}
 					</div>
