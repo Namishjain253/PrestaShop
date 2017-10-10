@@ -130,155 +130,7 @@ $(document).ready(function(){
 		});
 
 		// VALIDATION / CREATION AJAX
-		$(document).on('click', '#submitAccount, #submitGuestAccount', function(e){
-			e.preventDefault();
-			$('#opc_new_account-overlay, #opc_delivery_methods-overlay, #opc_payment_methods-overlay').fadeIn('slow')
-
-			var callingFile = '';
-            var advApiParam = '';
-            var params = '';
-
-            if ($(this).attr('data-adv-api')) {
-                advApiParam = '&isAdvApi=1';
-            }
-
-			if (parseInt($('#opc_id_customer').val()) == 0)
-			{
-				callingFile = authenticationUrl;
-				params = 'submitAccount=true&';
-			}
-			else
-			{
-				callingFile = orderOpcUrl;
-				params = 'method=editCustomer&';
-			}
-
-			$('#opc_account_form input:visible, #opc_account_form input[type=hidden]').each(function() {
-				if ($(this).is('input[type=checkbox]'))
-				{
-					if ($(this).is(':checked'))
-						params += encodeURIComponent($(this).attr('name'))+'=1&';
-				}
-				else if ($(this).is('input[type=radio]'))
-				{
-					if ($(this).is(':checked'))
-						params += encodeURIComponent($(this).attr('name'))+'='+encodeURIComponent($(this).val())+'&';
-				}
-				else
-					params += encodeURIComponent($(this).attr('name'))+'='+encodeURIComponent($(this).val())+'&';
-			});
-
-			$('#opc_account_form select:visible').each(function() {
-				params += encodeURIComponent($(this).attr('name'))+'='+encodeURIComponent($(this).val())+'&';
-			});
-			params += 'customer_lastname='+encodeURIComponent($('#customer_lastname').val())+'&';
-			params += 'customer_firstname='+encodeURIComponent($('#customer_firstname').val())+'&';
-			params += 'alias='+encodeURIComponent($('#alias').val())+'&';
-			params += 'other='+encodeURIComponent($('#other').val())+'&';
-			params += 'is_new_customer='+encodeURIComponent($('#is_new_customer').val())+'&';
-			// Clean the last &
-			params = params.substr(0, params.length-1);
-
-			$.ajax({
-				type: 'POST',
-				headers: { "cache-control": "no-cache" },
-				url: callingFile + '?rand=' + new Date().getTime() + advApiParam,
-				async: false,
-				cache: false,
-				dataType : "json",
-				data: 'ajax=true&'+params+'&token=' + static_token ,
-				success: function(jsonData)
-				{
-					if (jsonData.hasError)
-					{
-						var tmp = '';
-						var i = 0;
-						for(var error in jsonData.errors)
-							//IE6 bug fix
-							if(error !== 'indexOf')
-							{
-								i = i+1;
-								tmp += '<li>'+jsonData.errors[error]+'</li>';
-							}
-						tmp += '</ol>';
-						var errors = '<b>'+txtThereis+' '+i+' '+txtErrors+':</b><ol>'+tmp;
-						$('#opc_account_errors').slideUp('fast', function(){
-							$(this).html(errors).slideDown('slow', function(){
-								$.scrollTo('#opc_account_errors', 800);
-							});
-						});
-					}
-					else
-					{
-						$('#opc_account_errors').slideUp('slow', function(){
-							$(this).html('');
-						});
-					}
-
-					isGuest = parseInt($('#is_new_customer').val()) == 1 ? 0 : 1;
-					// update addresses id
-					if(jsonData.id_address_delivery !== undefined && jsonData.id_address_delivery > 0)
-						$('#opc_id_address_delivery').val(jsonData.id_address_delivery);
-					if(jsonData.id_address_invoice !== undefined && jsonData.id_address_invoice > 0)
-						$('#opc_id_address_invoice').val(jsonData.id_address_invoice);
-
-					if (jsonData.id_customer !== undefined && jsonData.id_customer !== 0 && jsonData.isSaved)
-					{
-						// update token
-						static_token = jsonData.token;
-
-						// It's not a new customer
-						if ($('#opc_id_customer').val() !== '0')
-							if (!saveAddress('delivery'))
-								return false;
-
-						// update id_customer
-						$('#opc_id_customer').val(jsonData.id_customer);
-
-						if ($('#invoice_address:checked').length !== 0)
-						{
-							if (!saveAddress('invoice'))
-								return false;
-						}
-
-						// update id_customer
-						$('#opc_id_customer').val(jsonData.id_customer);
-
-						// force to refresh carrier list
-						if (isGuest)
-						{
-							isLogged = 1;
-							$('#opc_account_saved').fadeIn('slow');
-							$('#submitAccount').hide();
-							updateAddressSelection(advApiParam);
-						}
-						else
-							updateNewAccountToAddressBlock(advApiParam);
-					}
-					$('#opc_new_account-overlay, #opc_delivery_methods-overlay, #opc_payment_methods-overlay').fadeIn('slow');
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
-					if (textStatus !== 'abort')
-					{
-						error = "TECHNICAL ERROR: unable to save account \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus;
-			            if (!!$.prototype.fancybox)
-			                $.fancybox.open([
-			                    {
-			                        type: 'inline',
-			                        autoScale: true,
-			                        minHeight: 30,
-			                        content: '<p class="fancybox-error">' + error + '</p>'
-			                    }
-			                ], {
-			                    padding: 0
-			                });
-			            else
-			                alert(error);
-					}
-					$('#opc_new_account-overlay, #opc_delivery_methods-overlay, #opc_payment_methods-overlay').fadeIn('slow')
-				}
-			});
-		});
+		validationCreation();
 	}
 
 	bindInputs();
@@ -1027,4 +879,151 @@ function multishippingMode(it)
 	}
 	if (typeof bindUniform !=='undefined')
 		bindUniform();
+}
+function  validationCreation() {
+	$(document).on('click', '#submitAccount, #submitGuestAccount', function (e) {
+		if($('#email').focus(function() {
+				if ($(this).is(':visible'))
+				{
+					$('#opc_account_saved').fadeOut('slow');
+					$('#submitAccount').show();
+				}
+			}));
+		e.preventDefault();
+			$('#opc_new_account-overlay, #opc_delivery_methods-overlay, #opc_payment_methods-overlay').fadeIn('slow')
+			var callingFile = '';
+			var advApiParam = '';
+			var params = '';
+
+			if ($(this).attr('data-adv-api')) {
+				advApiParam = '&isAdvApi=1';
+			}
+
+			if (parseInt($('#opc_id_customer').val()) == 0) {
+				callingFile = authenticationUrl;
+				params = 'submitAccount=true&';
+			}
+			else {
+				callingFile = orderOpcUrl;
+				params = 'method=editCustomer&';
+			}
+
+
+			$('#opc_account_form input:visible, #opc_account_form input[type=hidden]').each(function () {
+				if ($(this).is('input[type=checkbox]')) {
+					if ($(this).is(':checked'))
+						params += encodeURIComponent($(this).attr('name')) + '=1&';
+				}
+				else if ($(this).is('input[type=radio]')) {
+					if ($(this).is(':checked'))
+						params += encodeURIComponent($(this).attr('name')) + '=' + encodeURIComponent($(this).val()) + '&';
+				}
+				else
+					params += encodeURIComponent($(this).attr('name')) + '=' + encodeURIComponent($(this).val()) + '&';
+			});
+
+			$('#opc_account_form select:visible').each(function () {
+				params += encodeURIComponent($(this).attr('name')) + '=' + encodeURIComponent($(this).val()) + '&';
+			});
+			params += 'customer_lastname=' + encodeURIComponent($('#customer_lastname').val()) + '&';
+			params += 'customer_firstname=' + encodeURIComponent($('#customer_firstname').val()) + '&';
+			params += 'alias=' + encodeURIComponent($('#alias').val()) + '&';
+			params += 'other=' + encodeURIComponent($('#other').val()) + '&';
+			params += 'is_new_customer=' + encodeURIComponent($('#is_new_customer').val()) + '&';
+			// Clean the last &
+			params = params.substr(0, params.length - 1);
+
+			$.ajax({
+				type: 'POST',
+				headers: {"cache-control": "no-cache"},
+				url: callingFile + '?rand=' + new Date().getTime() + advApiParam,
+				async: false,
+				cache: false,
+				dataType: "json",
+				data: 'ajax=true&' + params + '&token=' + static_token,
+				success: function (jsonData) {
+					if (jsonData.hasError) {
+						var tmp = '';
+						var i = 0;
+						for (var error in jsonData.errors)
+							//IE6 bug fix
+							if (error !== 'indexOf') {
+								i = i + 1;
+								tmp += '<li>' + jsonData.errors[error] + '</li>';
+							}
+						tmp += '</ol>';
+						var errors = '<b>' + txtThereis + ' ' + i + ' ' + txtErrors + ':</b><ol>' + tmp;
+						$('#opc_account_errors').slideUp('fast', function () {
+							$(this).html(errors).slideDown('slow', function () {
+								$.scrollTo('#opc_account_errors', 800);
+							});
+						});
+					}
+					else {
+						$('#opc_account_errors').slideUp('slow', function () {
+							$(this).html('');
+						});
+					}
+
+					isGuest = parseInt($('#is_new_customer').val()) == 1 ? 0 : 1;
+					// update addresses id
+					if (jsonData.id_address_delivery !== undefined && jsonData.id_address_delivery > 0)
+						$('#opc_id_address_delivery').val(jsonData.id_address_delivery);
+					if (jsonData.id_address_invoice !== undefined && jsonData.id_address_invoice > 0)
+						$('#opc_id_address_invoice').val(jsonData.id_address_invoice);
+
+					if (jsonData.id_customer !== undefined && jsonData.id_customer !== 0 && jsonData.isSaved) {
+						// update token
+						static_token = jsonData.token;
+
+						// It's not a new customer
+						if ($('#opc_id_customer').val() !== '0')
+							if (!saveAddress('delivery'))
+								return false;
+
+						// update id_customer
+						$('#opc_id_customer').val(jsonData.id_customer);
+
+						if ($('#invoice_address:checked').length !== 0) {
+							if (!saveAddress('invoice'))
+								return false;
+						}
+
+						// update id_customer
+						$('#opc_id_customer').val(jsonData.id_customer);
+
+						// force to refresh carrier list
+						if (isGuest) {
+							isLogged = 1;
+							$('#opc_account_saved').fadeIn('slow');
+							$('#submitAccount').hide();
+							updateAddressSelection(advApiParam);
+						}
+						else
+							updateNewAccountToAddressBlock(advApiParam);
+					}
+					$('#opc_new_account-overlay, #opc_delivery_methods-overlay, #opc_payment_methods-overlay').fadeIn('slow');
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					if (textStatus !== 'abort') {
+						error = "TECHNICAL ERROR: unable to save account \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus;
+						if (!!$.prototype.fancybox)
+							$.fancybox.open([
+								{
+									type: 'inline',
+									autoScale: true,
+									minHeight: 30,
+									content: '<p class="fancybox-error">' + error + '</p>'
+								}
+							], {
+								padding: 0
+							});
+						else
+							alert(error);
+					}
+					$('#opc_new_account-overlay, #opc_delivery_methods-overlay, #opc_payment_methods-overlay').fadeIn('slow')
+				}
+			});
+	});
+
 }
