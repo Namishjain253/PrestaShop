@@ -156,6 +156,9 @@ class ValidateCore
      */
     public static function isName($name)
     {
+        if (empty(trim($name))) {
+            return false;
+        }
         return preg_match(Tools::cleanNonUnicodeSupport('/^[^0-9!<>,;?=+()@#"°{}_$%:]*$/u'), stripslashes($name));
     }
 
