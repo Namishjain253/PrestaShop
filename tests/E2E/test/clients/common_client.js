@@ -122,6 +122,12 @@ class CommonClient {
     return this.client.scrollWaitForExistAndClick(selector, margin, timeout);
   }
 
+  scrollWaitForExistAndSetValue(selector, value, timeout = 90000) {
+    return this.client
+      .scrollTo(selector, value)
+      .waitAndSetValue(selector, value, timeout);
+  }
+
   waitForVisibleAndClick(selector, timeout = 90000) {
     return this.client.waitForVisibleAndClick(selector, timeout);
   }

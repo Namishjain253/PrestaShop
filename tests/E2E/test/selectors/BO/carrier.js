@@ -1,0 +1,30 @@
+module.exports = {
+  CarrierSubMenu: {
+    new_carrier_button: '#page-header-desc-carrier-new_carrier',
+    search_input: '//*[@id="table-carrier"]/thead/tr[2]/th[3]/input',
+    search_button: '//*[@id="submitFilterButtoncarrier"]',
+    update_button: '//*[@id="tr_2_2_1"]/td[9]/div//a',
+    next_button: '//*[@id="carrier_wizard"]//a[contains(@class, "Next")]',
+    finish_button: '//*[@id="carrier_wizard"]//a[contains(@class, "Finish")]',
+    carrier_name_input: '#name',
+    carrier_transit_time_input: '#delay_1',
+    carrier_speed_grade_input: '#grade',
+    carrier_tracking_URL_input: '#url',
+    carrier_zone_ranges_inf_input: '//*[@id="zones_table"]//input[contains(@name, "range_inf")]',
+    carrier_zone_ranges_sup_input_first_range: '//*[@id="zones_table"]//input[@name="range_sup[0]"]',
+    carrier_zone_ranges_sup_input_second_range: '//*[@id="zones_table"]//input[@tabindex=46]',
+    carrier_ranges_all_zones_first_input: '//*[@id="zones_table"]//tr[@class="fees_all"]//input[@autocomplete="off"]',
+    carrier_ranges_all_zones_second_input: '//*[@id="zones_table"]//input[@tabindex="47"]',
+    carrier_ranges_title: '//*[@id="zone_ranges"]/h4',
+    logo: '#attachement_fileselectbutton',
+    carrier_ranges_radio_button: '//*[@id="zones_table"]/tbody//input[@type="checkbox" and @value="1"]',
+    shipping_handling_on_button: '//*[@id="fieldset_form_1"]//div[@class="col-lg-9"]//label[@for="shipping_handling_on"]',
+    select_billing_price: '#billing_price',
+    carrier_ranges_all_zones_checkbox: '//*[@id="zones_table"]//input[contains(@onclick, "checkAllZones")]',
+    max_width_input: '#max_width',
+    max_height_input:'#max_height',
+    max_depth_input: '#max_depth',
+    max_weight_input: '#max_weight',
+    add_new_range_button: '#add_new_range'
+  }
+};
