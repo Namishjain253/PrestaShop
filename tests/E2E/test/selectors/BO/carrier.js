@@ -1,9 +1,9 @@
 module.exports = {
   CarrierSubMenu: {
     new_carrier_button: '#page-header-desc-carrier-new_carrier',
-    search_input: '//*[@id="table-carrier"]/thead/tr[2]/th[3]/input',
+    search_input: '//*[@id="table-carrier"]//input[@name="carrierFilter_name"]',
     search_button: '//*[@id="submitFilterButtoncarrier"]',
-    update_button: '//*[@id="tr_2_2_1"]/td[9]/div//a',
+    edit_button: '//*[@id="table-carrier"]//a[@title="Edit"]',
     next_button: '//*[@id="carrier_wizard"]//a[contains(@class, "Next")]',
     finish_button: '//*[@id="carrier_wizard"]//a[contains(@class, "Finish")]',
     carrier_name_input: '#name',
@@ -25,6 +25,10 @@ module.exports = {
     max_height_input:'#max_height',
     max_depth_input: '#max_depth',
     max_weight_input: '#max_weight',
-    add_new_range_button: '#add_new_range'
+    add_new_range_button: '#add_new_range',
+    carrierFilter_name: '//*[@id="table-carrier"]//tbody//tr//td[3]',
+    carrierFilter_delay: '//*[@id="table-carrier"]//tbody//tr//td[5]',
+    carrier_reset_filter: '//*[@id="table-carrier"]//button[@name="submitResetcarrier"]',
+    logo_link:'//*[@id="table-carrier"]//tbody//tr//td[4]/img'
   }
 };

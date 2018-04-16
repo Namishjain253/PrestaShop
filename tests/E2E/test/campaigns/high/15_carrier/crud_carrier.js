@@ -1,7 +1,10 @@
 const {AccessPageBO} = require('../../../selectors/BO/access_page');
+const {AccessPageFO} = require('../../../selectors/FO/access_page');
 const {CarrierSubMenu} = require('../../../selectors/BO/carrier');
 const common_scenarios = require('./carrier');
-var carrierData = {
+
+let carrierData = {
+  carrier_name_input: "carrier",
   carrier_transit_time_input: "Delivery next day!",
   carrier_speed_grade_input: "0",
   carrier_tracking_URL_input: "http://example.com/track.php?num=@",
@@ -14,7 +17,6 @@ var carrierData = {
   max_height_input: "1000",
   max_depth_input: "1000",
   max_weight_input: "1000"
-
 };
 
 scenario('Create "Carrier"', () => {
@@ -28,7 +30,38 @@ scenario('Create "Carrier"', () => {
   }, 'carrier');
 }, 'carrier', true);
 
+//check In BO
+scenario('Check the creation of the "Carrier"', () => {
+  scenario('Login in the Back Office', client => {
+    test('should open the browser', () => client.open());
+    test('should login successfully in the Back Office', () => client.signInBO(AccessPageBO));
+  }, 'carrier');
+  common_scenarios.checkCreatedCarrierInBO(CarrierSubMenu,carrierData);
+  scenario('Logout from the Back Office', client => {
+    test('should logout successfully from the Back Office', () => client.signOutBO());
+  }, 'carrier');
+}, 'carrier', true);
 
+// CHECK IN FO
+scenario('Check "Carrier" in the Front Office', () => {
+  scenario('Login in the Front Office', client => {
+    test('should open the browser', () => client.open());
+    test('should login successfully in the Front Office', () => client.signInFO(AccessPageFO));
+    common_scenarios.checkCreatedCarrierInFO(CarrierSubMenu,carrierData);
+  }, 'carrier');
+}, 'carrier', true);
+
+//Update
+scenario('Update "Carrier"', () => {
+  scenario('Login in the Back Office', client => {
+    test('should open the browser', () => client.open());
+    test('should login successfully in the Back Office', () => client.signInBO(AccessPageBO));
+  }, 'carrier');
+  common_scenarios.updateCreatedCarrier(CarrierSubMenu,carrierData);
+  scenario('Logout from the Back Office', client => {
+    test('should logout successfully from the Back Office', () => client.signOutBO());
+  }, 'carrier');
+}, 'carrier', true);
 /*
 
 scenario('Update "Carrier"', () => {
