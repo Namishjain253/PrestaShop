@@ -32,7 +32,7 @@ module.exports = {
       test('should add value to the created attribute', () => client.addValueToAttribute(AttributeSubMenu, data.values));
       test('should verify the appearance of the green validation', () => client.checkTextValue(CatalogPage.success_panel, '×\nSuccessful creation.'));
     }, 'attribute_and_feature');
-  },
+  },/*
   checkAttributeInFO(productName, data) {
     scenario('Check that the attribute is well created/updated in the Front Office', client => {
       test('should set the shop language to "English"', () => client.changeLanguage('english'));
@@ -102,5 +102,5 @@ module.exports = {
       test('should ' + action + ' the created attribute', () => client.clickOnAction(AttributeSubMenu.bulk_actions, AttributeSubMenu.delete_bulk_action, action));
       test('should verify the appearance of the green validation', () => client.checkTextValue(CatalogPage.success_panel, '×\nThe selection has been successfully', 'contain'));
     }, 'attribute_and_feature');
-  }
+  }*/
 };
